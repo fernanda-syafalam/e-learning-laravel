@@ -1,6 +1,6 @@
 <div class="w-full p-16 overflow-y-auto">
 
-    <div class="w-full">
+    <div class="w-full mb-6">
         <h1 class="text-3xl">Materi Guru</h1>
         <!-- <div class="bg-gray-200 p-4 mt-4 pb-8">
             <h1 class="text-3xl">Selamat Datang di Conering</h1>
@@ -8,8 +8,8 @@
         </div> -->
     </div>
     
+    <h2 class="text-2xl">Tambahkan Materi / Tema</h2>
     <div class="p-4 mt-4 bg-gray-200">
-        <h2 class="text-2xl border-b w-[300px] p-2">Tambahkan Materi / Tema</h2>
         @if (session('add-materi-success'))
             <div class="alert mt-2 alert-success text-green-500 bg-green-200 border border-dashed border-green-500 p-2 rounded-md">
                 {{ session('add-materi-success') }}
