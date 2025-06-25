@@ -33,13 +33,13 @@
                     <a href="/admin/materi" class="bg-white w-full px-4 py-2 rounded-md font-medium text-black">Materi</a>
                 @endif
 
-                @if (Request::is('admin/proyek'))
+                @if (Request::is('admin/proyek') || Request::is('admin/monitor/proyek'))
                     <a href="/admin/proyek" class="bg-[#5f5757] w-full px-4 py-2 rounded-md font-medium text-white">Proyek</a>
                 @else
                     <a href="/admin/proyek" class="bg-white w-full px-4 py-2 rounded-md font-medium text-black">Proyek</a>
                 @endif
 
-                @if (Request::is('admin/kelompok/kerja'))
+                @if (Request::is('admin/kelompok/kerja') || Request::is('admin/detail/quis') || Request::is('admin/create/quis') || Request::is('admin/list/quis'))
                     <a href="/admin/kelompok/kerja" class="bg-[#5f5757] w-full px-4 py-2 rounded-md font-medium text-white">Kelompok kerja</a>
                 @else
                     <a href="/admin/kelompok/kerja" class="bg-white w-full px-4 py-2 rounded-md font-medium text-black">Kelompok kerja</a>
@@ -63,8 +63,12 @@
             </form>
         </div>
 
-        <div class="w-full h-screen overflow-y-scroll">
-            @if (Request::is('dashboard'))
+        <div class="w-full h-screen overflow-y-scroll">            
+            @if (session('view') === 'detail_quis')
+                @include('admin.form_detail_kuis')
+            @elseif (session('view') === 'list_kuis')
+                @include('admin.list_kuis')
+            @elseif (Request::is('dashboard'))
                 @include('admin.home')
             @elseif (Request::is('admin/materi'))
                 @include('admin.materi')
@@ -74,6 +78,18 @@
                 @include('admin.kelompok_kerja')
             @elseif (Request::is('admin/penilaian/evaluasi'))
                 @include('admin.penilaian_evaluasi')
+            @elseif (Request::is('admin/create/quis'))
+                @include('admin.form_kuis')
+            @elseif (Route::is('admin.detail.quis'))
+                @include('admin.form_detail_kuis')
+            @elseif (Request::is('admin/edit/quis'))
+                @include('admin.form_kuis')
+            @elseif (Request::is('admin/list/quis'))
+                @include('admin.list_kuis')
+            @elseif (Request::is('admin/monitor/proyek'))
+                @include('admin.monitor_proyek')
+            @else 
+                <h1>None</h1>
             @endif
         </div>
         
