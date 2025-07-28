@@ -26,4 +26,9 @@ class NilaiQuis extends Model
     {
         return $this->belongsTo(Quis::class, 'id_quis');
     }
+
+    public function evaluate()
+    {
+        return $this->hasOne(Evaluate::class, 'id_nilai');
+    }
 }

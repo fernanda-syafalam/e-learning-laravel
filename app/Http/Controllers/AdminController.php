@@ -10,6 +10,9 @@ use App\Models\Proyek;
 use App\Models\Quis;
 use App\Models\Soal;
 use App\Models\Source;
+use App\Models\Kelompok;
+use App\Models\NilaiQuis;
+use App\Models\Evaluate;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -204,6 +207,93 @@ class AdminController extends Controller
         $soal->delete();
 
         return redirect()->back()->with('success', 'Soal berhasil dihapus.');
+    }
+
+    // Kerja Kelompok
+    public function KelompokKerjaView()
+    {
+        $kelompok = Kelompok::with(['user1', 'user2', 'user3', 'user4', 'user5'])->get();
+        $users = User::where('role', 'user')->get();
+        
+        return view('admin.dashboard', compact('kelompok', 'users'));
+    }
+
+    public function BuatKelompokOtomatis()
+    {
+        // Hapus kelompok yang ada
+        Kelompok::truncate();
+        
+        // Ambil semua siswa
+        $students = User::where('role', 'user')->get();
+        
+        // Ambil nilai quiz terakhir untuk setiap siswa
+        $studentScores = [];
+        foreach ($students as $student) {
+            $latestScore = NilaiQuis::where('id_user', $student->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            $studentScores[] = [
+                'user' => $student,
+                'score' => $latestScore ? $latestScore->total : 0
+            ];
+        }
+        
+        // Urutkan berdasarkan nilai (descending)
+        usort($studentScores, function($a, $b) {
+            return $b['score'] - $a['score'];
+        });
+        
+        // Bagi menjadi kelompok (minimal 2 orang per kelompok)
+        $groups = [];
+        $groupSize = max(2, ceil(count($studentScores) / 5)); // Maksimal 5 kelompok
+        
+        for ($i = 0; $i < count($studentScores); $i += $groupSize) {
+            $group = array_slice($studentScores, $i, $groupSize);
+            $groups[] = $group;
+        }
+        
+        // Buat kelompok di database
+        foreach ($groups as $group) {
+            $kelompok = new Kelompok();
+            
+            if (isset($group[0])) $kelompok->id_user_1 = $group[0]['user']->id;
+            if (isset($group[1])) $kelompok->id_user_2 = $group[1]['user']->id;
+            if (isset($group[2])) $kelompok->id_user_3 = $group[2]['user']->id;
+            if (isset($group[3])) $kelompok->id_user_4 = $group[3]['user']->id;
+            if (isset($group[4])) $kelompok->id_user_5 = $group[4]['user']->id;
+            
+            $kelompok->save();
+        }
+        
+        return redirect()->route('admin.kelompok.kerja')->with('success', 'Kelompok berhasil dibuat secara otomatis!');
+    }
+
+    // Penilaian dan Evaluasi
+    public function PenilaianEvaluasiView()
+    {
+        $nilaiQuis = NilaiQuis::with(['user', 'quis', 'evaluate'])->get();
+        
+        return view('admin.dashboard', compact('nilaiQuis'));
+    }
+
+    public function SimpanEvaluasi(Request $request)
+    {
+        $request->validate([
+            'id_nilai' => 'required|exists:nilai_quis,id',
+            'message' => 'required|string'
+        ]);
+
+        // Hapus evaluasi yang ada jika ada
+        Evaluate::where('id_nilai', $request->id_nilai)->delete();
+        
+        // Buat evaluasi baru
+        Evaluate::create([
+            'id_nilai' => $request->id_nilai,
+            'message' => $request->message
+        ]);
+
+        return redirect()->route('admin.penilaian.evaluasi')->with('success', 'Evaluasi berhasil disimpan!');
     }
 
 }

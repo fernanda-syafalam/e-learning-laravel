@@ -88,6 +88,10 @@
                 @include('admin.list_kuis')
             @elseif (Request::is('admin/monitor/proyek'))
                 @include('admin.monitor_proyek')
+            @elseif (Request::is('admin/penilaian/evaluasi'))
+                @include('admin.penilaian_evaluasi')\
+            @elseif (Request::is('admin/kelompok/kerja') || Request::is('admin/detail/quis') || Request::is('admin/create/quis') || Request::is('admin/list/quis'))
+                @include('admin.kelompok_kerja')
             @else 
                 <h1>None</h1>
             @endif

@@ -36,7 +36,10 @@ Route::get('/dashboard', function () {
             return view('manager.dashboard', compact('ucount'));
         } else {
             $pengumuman = Pengumuman::orderBy('id')->first();
-            $guru = User::findOrFail($pengumuman->id_guru);
+            $guru = null;
+            if ($pengumuman) {
+                $guru = User::find($pengumuman->id_guru);
+            }
             return view('user.dashboard', compact('pengumuman', 'guru'));
         }
 
@@ -50,7 +53,8 @@ Route::middleware(['auth', 'verified', 'role:Admin'])->group(function () {
     Route::get('/admin/materi', fn() => view('admin.dashboard'))->name('admin.materi');
     Route::get('/admin/proyek', fn() => view('admin.dashboard'))->name('admin.proyek');
     Route::get('/admin/monitor/proyek', [AdminController::class, 'MonitorProyekView'])->name('admin.monitor.proyek');
-    Route::get('/admin/kelompok/kerja', fn() => view('admin.dashboard'))->name('admin.kelompok.kerja');
+    Route::get('/admin/kelompok/kerja', [AdminController::class, 'KelompokKerjaView'])->name('admin.kelompok.kerja');
+    Route::post('/admin/buat/kelompok/otomatis', [AdminController::class, 'BuatKelompokOtomatis'])->name('admin.buat.kelompok.otomatis');
     Route::get('/admin/create/quis', fn() => view('admin.dashboard'))->name('admin.create.quis');
     Route::get('/admin/list/quis', [AdminController::class, 'ViewAllQuis'])->name('admin.list.quis');
     Route::get('/admin/detail/quis/{id}', [AdminController::class, 'ViewQuizDetail'])->name('admin.detail.quis');
@@ -66,7 +70,8 @@ Route::middleware(['auth', 'verified', 'role:Admin'])->group(function () {
     Route::post('/admin/tambah/kelompok/kerja', [AdminController::class, 'TambahPengumuman'])->name('admin.tambah.kelompok.kerja');
     Route::post('/admin/tambah/kuis', [AdminController::class, 'TambahQuis'])->name('admin.tambah.kuis');
     Route::get('/admin/ranking/kelompok/kerja', [AdminController::class, 'RankingKelompokKerjaView'])->name('admin.rangking.kelompok.kerja');
-    Route::get('/admin/penilaian/evaluasi', fn() => view('admin.dashboard'))->name('admin.penilaian.evaluasi');
+    Route::get('/admin/penilaian/evaluasi', [AdminController::class, 'PenilaianEvaluasiView'])->name('admin.penilaian.evaluasi');
+    Route::post('/admin/simpan/evaluasi', [AdminController::class, 'SimpanEvaluasi'])->name('admin.simpan.evaluasi');
 });
 
 // 🔒 Hanya Manager

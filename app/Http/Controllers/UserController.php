@@ -12,6 +12,8 @@ use App\Models\Quis;
 use App\Models\NilaiQuis;
 use App\Models\Soal;
 use App\Models\Source;
+use App\Models\Kelompok;
+use App\Models\Evaluate;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -79,13 +81,27 @@ class UserController extends Controller
     }
 
     public function ViewKelompoKerja() {
+        // Cari kelompok yang berisi user ini
+        $kelompok = Kelompok::where('id_user_1', Auth::user()->id)
+            ->orWhere('id_user_2', Auth::user()->id)
+            ->orWhere('id_user_3', Auth::user()->id)
+            ->orWhere('id_user_4', Auth::user()->id)
+            ->orWhere('id_user_5', Auth::user()->id)
+            ->with(['user1', 'user2', 'user3', 'user4', 'user5'])
+            ->first();
+        
         $quis = Quis::all();
         $nilai_quis = NilaiQuis::where('id_user', Auth::user()->id)->get();
-        return view('user.dashboard', compact('quis', 'nilai_quis'));
+        
+        return view('user.dashboard', compact('kelompok', 'quis', 'nilai_quis'));
     }
 
     public function ViewPenilaian() {
-        return view('user.dashboard');
+        $nilaiQuis = NilaiQuis::where('id_user', Auth::user()->id)
+            ->with(['quis', 'evaluate'])
+            ->get();
+        
+        return view('user.dashboard', compact('nilaiQuis'));
     }
 
     public function ViewQuisKerja($id) {
