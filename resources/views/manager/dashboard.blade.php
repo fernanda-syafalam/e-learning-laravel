@@ -15,6 +15,7 @@
         <!-- Style -->
         <link rel="stylesheet" href="../css/app.css">
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-white flex">
         <div class="w-1/5 h-screen bg-gray-200 p-4 justify-between flex flex-col">
