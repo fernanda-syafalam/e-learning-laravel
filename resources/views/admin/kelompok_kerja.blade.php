@@ -1,31 +1,38 @@
-<div class="w-full p-16 overflow-y-auto">
+<div class="w-full p-8 md:p-16 overflow-y-auto bg-gray-50 min-h-screen">
 
-    <div class="w-full flex justify-between mb-6">
-        <h1 class="text-3xl">Kelompok Kerja</h1>
-        <div class="flex gap-2">
+    <!-- Header -->
+    <div class="w-full flex flex-wrap justify-between items-center mb-6 gap-4">
+        <h1 class="text-3xl font-bold text-gray-800">Kelompok Kerja</h1>
+        <div class="flex flex-wrap gap-2">
             <form action="{{ route('admin.buat.kelompok.otomatis') }}" method="POST" class="inline">
                 @csrf
-                <button type="submit" class="cursor-pointer hover:opacity-90 p-2 rounded-md bg-[#5f5757] text-white font-medium">
+                <button type="submit" class="px-4 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 transition">
                     Buat Kelompok Otomatis
                 </button>
             </form>
-            <a href="{{ route('admin.create.quis') }}" class="cursor-pointer hover:opacity-90 p-2 rounded-md bg-[#5f5757] text-white font-medium">Buat Quiz</a>
-            <a href="{{ route('admin.list.quis') }}" class="cursor-pointer hover:opacity-90 p-2 rounded-md bg-[#5f5757] text-white font-medium">Lihat Kuis</a>
+            <a href="{{ route('admin.create.quis') }}" class="px-4 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 transition">
+                Buat Quiz
+            </a>
+            <a href="{{ route('admin.list.quis') }}" class="px-4 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 transition">
+                Lihat Kuis
+            </a>
         </div>
     </div>
 
+    <!-- Alert -->
     @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
             {{ session('success') }}
         </div>
     @endif
 
+    <!-- Daftar Kelompok -->
     @if($kelompok->count() > 0)
-        <h2 class="text-2xl mb-4">Daftar Kelompok</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Daftar Kelompok</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($kelompok as $index => $group)
-                <div class="bg-gray-200 p-4 rounded-md">
-                    <h3 class="text-lg font-semibold mb-3">Kelompok {{ $index + 1 }}</h3>
+                <div class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800">Kelompok {{ $index + 1 }}</h3>
                     <div class="space-y-2">
                         @if($group->user1)
                             <div class="flex items-center">
@@ -58,29 +65,30 @@
                             </div>
                         @endif
                     </div>
-                    <div class="mt-3 text-sm text-gray-600">
+                    <div class="mt-3 text-sm text-gray-500">
                         Total: {{ count($group->members) }} anggota
                     </div>
                 </div>
             @endforeach
         </div>
     @else
-        <div class="text-center py-8 bg-gray-200 rounded-md">
-            <p class="text-gray-500 mb-4">Belum ada kelompok yang dibuat</p>
+        <div class="text-center py-10 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <p class="text-gray-500 mb-3">Belum ada kelompok yang dibuat</p>
             <p class="text-sm text-gray-400">Klik tombol "Buat Kelompok Otomatis" untuk membuat kelompok berdasarkan nilai quiz terakhir</p>
         </div>
     @endif
 
+    <!-- Daftar Siswa -->
     @if($users->count() > 0)
-        <div class="mt-8">
-            <h3 class="text-2xl mb-4">Daftar Siswa</h3>
-            <div class="bg-gray-200 p-4 rounded-md">
-                <table class="w-full">
+        <div class="mt-10">
+            <h3 class="text-2xl font-semibold mb-4 text-gray-800">Daftar Siswa</h3>
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-x-auto">
+                <table class="w-full border-collapse">
                     <thead>
-                        <tr class="border-b-2 border-gray-300">
-                            <th class="text-left py-2">Nama</th>
-                            <th class="text-left py-2">Email</th>
-                            <th class="text-left py-2">Nilai Quiz Terakhir</th>
+                        <tr class="bg-gray-100 border-b border-gray-300">
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">Nama</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">Email</th>
+                            <th class="text-left py-3 px-4 font-medium text-gray-700">Nilai Quiz Terakhir</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,10 +98,10 @@
                                     ->orderBy('created_at', 'desc')
                                     ->first();
                             @endphp
-                            <tr class="border-b border-gray-300">
-                                <td class="py-2">{{ $user->name }}</td>
-                                <td class="py-2">{{ $user->email }}</td>
-                                <td class="py-2">{{ $latestScore ? $latestScore->total : 'Belum ada nilai' }}</td>
+                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                                <td class="py-3 px-4">{{ $user->name }}</td>
+                                <td class="py-3 px-4">{{ $user->email }}</td>
+                                <td class="py-3 px-4">{{ $latestScore ? $latestScore->total : 'Belum ada nilai' }}</td>
                             </tr>
                         @endforeach
                     </tbody>

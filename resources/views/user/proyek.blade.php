@@ -12,7 +12,7 @@
                 });
             @endphp
 
-            <div class="w-full bg-gray-200 p-4 rounded-md flex justify-between items-center">
+            <div class="w-full bg-white p-4 rounded-md shadow flex justify-between items-center">
                 <h2 class="text-xl font-bold">{{ $pro->judul }}</h2>
 
                 @if ($penugasanUser)
@@ -21,7 +21,7 @@
                     </span>
                 @else
                     <a href="{{ url('user/proyek/kerja', $pro->id) }}"
-                    class="font-medium text-white bg-[#5f5757] rounded-md p-2 hover:bg-[#4a4545]">
+                       class="font-medium text-white bg-blue-400 rounded-md p-2 hover:bg-blue-500">
                         Kerjakan
                     </a>
                 @endif
