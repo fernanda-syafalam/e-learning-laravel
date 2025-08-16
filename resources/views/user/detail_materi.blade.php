@@ -1,4 +1,4 @@
-<div class="w-full p-16 overflow-y-auto bg-gray-50 min-h-screen">
+<div class="w-full p-16 overflow-y-auto min-h-screen">
 
     <!-- Tombol Kembali -->
     <div class="mb-6">

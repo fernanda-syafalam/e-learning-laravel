@@ -13,6 +13,7 @@
         <!-- Style -->
         <link rel="stylesheet" href="../css/app.css">
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-white">
         @auth

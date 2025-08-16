@@ -3,109 +3,84 @@
 @section('title', 'Kelompok Kerja')
 
 @section('content')
-<div class="w-full p-16 overflow-y-auto">
+<div class="w-full p-6 md:p-12 lg:p-16 min-h-screen overflow-y-auto">
 
-    <div class="w-full">
-        <h1 class="text-3xl">Kelompok Kerja Saya</h1>
+    {{-- Header --}}
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Kelompok Kerja Saya</h1>
+        <p class="text-gray-500 text-sm mt-1">Lihat anggota kelompok dan daftar quiz yang tersedia</p>
     </div>
 
+    {{-- Anggota Kelompok --}}
     @if($kelompok)
-        <div class="mt-4 bg-gray-200 p-4 rounded-md">
-            <h2 class="text-2xl mb-4">Anggota Kelompok:</h2>
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M16 3.13a4 4 0 010 7.75M8 3.13a4 4 0 010 7.75" />
+                </svg>
+                Anggota Kelompok
+            </h2>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                @if($kelompok->user1)
-                    <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
-                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            {{ substr($kelompok->user1->name, 0, 1) }}
+                @foreach (['user1' => 'bg-blue-500', 'user2' => 'bg-green-500', 'user3' => 'bg-yellow-500', 'user4' => 'bg-red-500', 'user5' => 'bg-purple-500'] as $userKey => $colorClass)
+                    @if($kelompok->$userKey)
+                        <div class="flex items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition">
+                            <div class="w-10 h-10 {{ $colorClass }} rounded-full flex items-center justify-center text-white font-bold mr-3">
+                                {{ strtoupper(substr($kelompok->$userKey->name, 0, 1)) }}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">{{ $kelompok->$userKey->name }}</p>
+                                <p class="text-sm text-gray-500">{{ $kelompok->$userKey->email }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-medium">{{ $kelompok->user1->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $kelompok->user1->email }}</p>
-                        </div>
-                    </div>
-                @endif
-                @if($kelompok->user2)
-                    <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
-                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            {{ substr($kelompok->user2->name, 0, 1) }}
-                        </div>
-                        <div>
-                            <p class="font-medium">{{ $kelompok->user2->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $kelompok->user2->email }}</p>
-                        </div>
-                    </div>
-                @endif
-                @if($kelompok->user3)
-                    <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
-                        <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            {{ substr($kelompok->user3->name, 0, 1) }}
-                        </div>
-                        <div>
-                            <p class="font-medium">{{ $kelompok->user3->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $kelompok->user3->email }}</p>
-                        </div>
-                    </div>
-                @endif
-                @if($kelompok->user4)
-                    <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
-                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            {{ substr($kelompok->user4->name, 0, 1) }}
-                        </div>
-                        <div>
-                            <p class="font-medium">{{ $kelompok->user4->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $kelompok->user4->email }}</p>
-                        </div>
-                    </div>
-                @endif
-                @if($kelompok->user5)
-                    <div class="flex items-center p-3 bg-white rounded-md shadow-sm">
-                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                            {{ substr($kelompok->user5->name, 0, 1) }}
-                        </div>
-                        <div>
-                            <p class="font-medium">{{ $kelompok->user5->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $kelompok->user5->email }}</p>
-                        </div>
-                    </div>
-                @endif
+                    @endif
+                @endforeach
             </div>
+
             <div class="mt-4 text-sm text-gray-600">
                 Total anggota: {{ count($kelompok->members) }} orang
             </div>
         </div>
     @else
-        <div class="mt-4 text-center py-8 bg-gray-200 rounded-md">
-            <p class="text-gray-500 mb-2">Anda belum ditugaskan ke dalam kelompok</p>
+        <div class="bg-white text-center p-8 rounded-xl shadow-md mb-8">
+            <p class="text-gray-500 text-lg mb-2">Anda belum ditugaskan ke dalam kelompok</p>
             <p class="text-sm text-gray-400">Silakan tunggu guru membuat kelompok</p>
         </div>
     @endif
 
-    <!-- Daftar Quiz -->
-    <div class="mt-8">
-        <h2 class="text-2xl mb-4">Daftar Quiz</h2>
+    {{-- Daftar Quiz --}}
+    <div class="bg-white p-6 rounded-xl shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2m-4-8a9 9 0 100 18 9 9 0 000-18z" />
+            </svg>
+            Daftar Quiz
+        </h2>
+
         @if($quis->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($quis as $quiz)
                     @php
                         $sudahDikerjakan = $nilai_quis->where('id_quis', $quiz->id)->first();
                     @endphp
-                    <div class="bg-gray-200 p-4 rounded-md {{ $sudahDikerjakan ? 'border-2 border-green-500' : '' }}">
-                        <h3 class="font-semibold mb-2">{{ $quiz->judul }}</h3>
-                        <div class="text-sm text-gray-600 mb-3">
-                            <p>Total soal: {{ $quiz->total_soal }}</p>
-                            <p>Waktu: {{ $quiz->waktu_pengerjaan }} menit</p>
-                            <p>Deadline: {{ \Carbon\Carbon::parse($quiz->deadline)->format('d/m/Y H:i') }}</p>
+                    <div class="p-5 rounded-xl border {{ $sudahDikerjakan ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-gray-50' }} shadow-sm hover:shadow-md transition">
+                        <h3 class="text-lg font-bold text-gray-800 mb-3">{{ $quiz->judul }}</h3>
+                        <div class="text-sm text-gray-600 space-y-1 mb-4">
+                            <p>📄 Total soal: {{ $quiz->total_soal }}</p>
+                            <p>⏱ Waktu: {{ $quiz->waktu_pengerjaan }} menit</p>
+                            <p>📅 Deadline: {{ \Carbon\Carbon::parse($quiz->deadline)->format('d/m/Y H:i') }}</p>
                         </div>
+
                         @if($sudahDikerjakan)
                             <div class="flex items-center justify-between">
-                                <span class="text-green-600 font-medium">Sudah dikerjakan</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                                <span class="text-green-700 font-medium">✅ Sudah dikerjakan</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm font-semibold">
                                     Nilai: {{ $sudahDikerjakan->total }}
                                 </span>
                             </div>
                         @else
                             <a href="{{ route('user.kuis.kerja', $quiz->id) }}" 
-                               class="block w-full text-center bg-[#5f5757] hover:opacity-90 text-white py-2 px-4 rounded cursor-pointer">
+                               class="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition">
                                 Kerjakan Quiz
                             </a>
                         @endif
@@ -113,7 +88,7 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-4 bg-gray-200 rounded-md">
+            <div class="text-center p-8 bg-gray-50 rounded-xl border border-gray-200">
                 <p class="text-gray-500">Belum ada quiz yang tersedia</p>
             </div>
         @endif

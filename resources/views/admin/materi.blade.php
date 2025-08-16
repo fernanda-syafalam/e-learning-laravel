@@ -1,33 +1,48 @@
-<div class="w-full p-16 overflow-y-auto">
+<div class="w-full p-8 md:p-16 overflow-y-auto min-h-screen">
 
-    <div class="w-full mb-6">
-        <h1 class="text-3xl">Materi Guru</h1>
-        <!-- <div class="bg-gray-200 p-4 mt-4 pb-8">
-            <h1 class="text-3xl">Selamat Datang di Conering</h1>
-            <p>Media Pembelajaran Project Based Learning<p>
-        </div> -->
+    <!-- Judul -->
+    <div class="w-full mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Materi Guru</h1>
+        <p class="text-gray-600 mt-1">Kelola dan tambahkan materi pembelajaran Anda di sini</p>
     </div>
-    
-    <h2 class="text-2xl">Tambahkan Materi / Tema</h2>
-    <div class="p-4 mt-4 bg-gray-200">
+
+
+    <!-- Form Tambah Materi -->
+    <div class="p-6 bg-white rounded-lg shadow-md border border-gray-100">
+        <h2 class="text-2xl font-semibold text-blue-500 border-b border-gray-200 pb-2 mb-4">Tambahkan Materi / Tema</h2>
+        
         @if (session('add-materi-success'))
-            <div class="alert mt-2 alert-success text-green-500 bg-green-200 border border-dashed border-green-500 p-2 rounded-md">
+            <div class="mt-2 p-3 rounded-md bg-green-50 border border-green-300 text-green-700">
                 {{ session('add-materi-success') }}
             </div>
         @endif
-        <form method="post" action="{{ route('admin.tambah.materi') }}" class="mt-6">
+
+        <form method="post" action="{{ route('admin.tambah.materi') }}" class="space-y-6">
             @csrf    
             <input type="number" name="teachid" value="{{ Auth::user()->id }}" hidden/>
-            <div class="flex flex-col mb-4">
-                <label for="judul" class="text-xl mb-2">Judul Materi / tema</label>
-                <input type="text" class="bg-white p-2" name="judul" id="judul" required/>
+            
+            <!-- Judul -->
+            <div>
+                <label for="judul" class="block text-gray-700 font-medium mb-2">Judul Materi / Tema</label>
+                <input type="text" id="judul" name="judul" 
+                       class="w-full rounded-md border border-gray-300 p-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                       placeholder="Masukkan judul materi..." required/>
             </div>
-            <div class="flex flex-col">
-                <label for="deskripsi" class="text-xl mb-2">Deskripsi</label>
-                <textarea name="deskripsi" id="deskripsi" class="w-full h-40 resize-none bg-white p-2" required></textarea>
+
+            <!-- Deskripsi -->
+            <div>
+                <label for="deskripsi" class="block text-gray-700 font-medium mb-2">Deskripsi</label>
+                <textarea id="deskripsi" name="deskripsi" 
+                          class="w-full h-40 resize-none rounded-md border border-gray-300 p-3 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                          placeholder="Tuliskan deskripsi materi..." required></textarea>
             </div>
-            <div class="w-full flex justify-end mt-4">
-                <button type="submit" class="cursor-pointer p-2 rounded-md bg-[#5f5757] text-white font-medium">Submit</button>
+
+            <!-- Tombol -->
+            <div class="flex justify-end">
+                <button type="submit" 
+                        class="px-5 py-2 rounded-md bg-blue-400 text-white font-medium hover:bg-blue-500 transition">
+                    Submit
+                </button>
             </div>
         </form>
     </div>
