@@ -38,6 +38,19 @@ class AdminController extends Controller
         return redirect()->back()->with('add-announcement-success', 'Pengumuman berhasil dikirim.');
     }
 
+    public function DeletePengumuman($id) {
+        $pengumuman = Pengumuman::findOrFail($id);
+        
+        // optional: pastikan hanya pemilik (guru yg login) yg bisa hapus
+        if ($pengumuman->id_guru != Auth::id()) {
+            return redirect()->back()->with('error', 'Anda tidak berhak menghapus pengumuman ini.');
+        }
+
+        $pengumuman->delete();
+
+        return redirect()->back()->with('delete-announcement-success', 'Pengumuman berhasil dihapus.');
+    }
+
     public function TambahMateri(Request $request) {
         $request->validate([
             'teachid' => ['required'],
@@ -53,6 +66,20 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('add-materi-success', 'Materi berhasil disimpan.');
+    }
+
+    public function ViewMateri() {
+
+        $materi = Materi::all();
+
+        return view('admin.dashboard', compact('materi'));
+    }
+
+    public function DeleteMateri($id) {
+        $materi = Materi::findOrFail($id);
+        $materi->delete();
+
+        return redirect()->back()->with('delete-announcement-success', 'Materi berhasil dihapus.');
     }
 
     public function RankingKelompokKerjaView() 
