@@ -51,4 +51,53 @@
         </form>
     </div>
 
+    <div class="mt-16">
+        <h2 class="text-2xl font-semibold border-b border-gray-200 pb-2 mb-4 text-blue-500">
+            History Pengumuman
+        </h2>
+
+        <div class="overflow-x-auto bg-white shadow-md">
+            <table class="min-w-full border border-gray-200 rounded-lg shadow">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 border-b text-left">#</th>
+                        <th class="px-4 py-2 border-b text-left">Pesan</th>
+                        <th class="px-4 py-2 border-b text-left">Tanggal</th>
+                        <th class="px-4 py-2 border-b text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($pengumuman as $index => $item)
+                        @if ($item->id_guru == Auth::user()->id)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border-b">{{ $index + 1 }}</td>
+                                <td class="px-4 py-2 border-b">{{ $item->pesan }}</td>
+                                <td class="px-4 py-2 border-b">
+                                    {{ $item->created_at->format('d M Y H:i') }}
+                                </td>
+                                <td class="px-4 py-2 border-b">
+                                    <form action="{{ route('admin.delete.pengumuman', $item->id) }}" method="POST" 
+                                        onsubmit="return confirm('Yakin mau hapus pengumuman ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:underline">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endif
+                    @empty
+                        <tr>
+                            <td colspan="3" class="px-4 py-2 text-center text-gray-500">
+                                Belum ada pengumuman.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 </div>

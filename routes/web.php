@@ -29,6 +29,8 @@ Route::get('/dashboard', function () {
             } elseif ($view === 'list_kuis') {
                 $data['quis'] = session('quis');
             }
+
+            $data['pengumuman'] = Pengumuman::all();
             
             return view('admin.' . $view, $data);
         } elseif ($role === "Manager") {
@@ -50,7 +52,8 @@ Route::get('/dashboard', function () {
 
 // 🔒 Hanya Admin
 Route::middleware(['auth', 'verified', 'role:Admin'])->group(function () {
-    Route::get('/admin/materi', fn() => view('admin.dashboard'))->name('admin.materi');
+    Route::get('/admin/materi', [AdminController::class, 'ViewMateri'])->name('admin.materi');
+    Route::delete('admin/delete/materi/{id}', [AdminController::class, 'DeleteMateri'])->name('admin.delete.materi');
     Route::get('/admin/proyek', fn() => view('admin.dashboard'))->name('admin.proyek');
     Route::get('/admin/monitor/proyek', [AdminController::class, 'MonitorProyekView'])->name('admin.monitor.proyek');
     Route::get('/admin/kelompok/kerja', [AdminController::class, 'KelompokKerjaView'])->name('admin.kelompok.kerja');
@@ -72,6 +75,7 @@ Route::middleware(['auth', 'verified', 'role:Admin'])->group(function () {
     Route::get('/admin/ranking/kelompok/kerja', [AdminController::class, 'RankingKelompokKerjaView'])->name('admin.rangking.kelompok.kerja');
     Route::get('/admin/penilaian/evaluasi', [AdminController::class, 'PenilaianEvaluasiView'])->name('admin.penilaian.evaluasi');
     Route::post('/admin/simpan/evaluasi', [AdminController::class, 'SimpanEvaluasi'])->name('admin.simpan.evaluasi');
+    Route::delete('/admin/delete/pengumuman/{id}', [AdminController::class, 'DeletePengumuman'])->name('admin.delete.pengumuman');
 });
 
 // 🔒 Hanya Manager

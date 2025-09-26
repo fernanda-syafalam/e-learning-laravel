@@ -47,4 +47,53 @@
         </form>
     </div>
 
+    <div class="mt-16">
+        <h2 class="text-2xl font-semibold text-blue-500 border-b border-gray-200 pb-2 mb-4">
+            Semua Materi / Tema
+        </h2>
+
+        <div class="overflow-x-auto bg-white shadow-md">
+            <table class="min-w-full border border-gray-200 rounded-lg shadow">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 border-b text-left">#</th>
+                        <th class="px-4 py-2 border-b text-left">Judul</th>
+                        <th class="px-4 py-2 border-b text-left">Deskripsi</th>
+                        <th class="px-4 py-2 border-b text-left">Tanggal Dibuat</th>
+                        <th class="px-4 py-2 border-b text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($materi as $index => $item)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-2 border-b">{{ $index + 1 }}</td>
+                            <td class="px-4 py-2 border-b">{{ $item->judul }}</td>
+                            <td class="px-4 py-2 border-b">{{ $item->deskripsi }}</td>
+                            <td class="px-4 py-2 border-b">
+                                {{ \Carbon\Carbon::parse($item->tanggal_dibuat)->format('d M Y H:i') }}
+                            </td>
+                            <td class="px-4 py-2 border-b">
+                                <form action="{{ route('admin.delete.materi', $item->id) }}" method="POST"
+                                    onsubmit="return confirm('Yakin ingin menghapus materi ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:underline">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-4 py-2 text-center text-gray-500">
+                                Belum ada materi.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 </div>
